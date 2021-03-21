@@ -26,17 +26,23 @@ stages:
         SHAKEDOWN_URL: https://duckduckgo.com
 - stage: Deploy
   jobs:
-  - job: Build
+  - deployment: Deploy
+    displayName: deploy to dockerhub
     pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: Docker@2
-      displayName: Build and push the image
-      inputs:
-        containerRegistry: 'dockerhub-robwhitby'
-        repository: 'robwhitby/shakedown'
-        command: 'buildAndPush'
-        Dockerfile: './Dockerfile'
-        buildContext: '.'
-        tags: '$(tag)'
+      vmImage: 'Ubuntu-latest'
+    # creates an environment if it doesn't exist
+    environment: 'dockerhub.shakedown'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: Docker@2
+            displayName: Build and push the image
+            inputs:
+              containerRegistry: 'dockerhub-robwhitby'
+              repository: 'robwhitby/shakedown'
+              command: 'buildAndPush'
+              Dockerfile: './Dockerfile'
+              buildContext: '.'
+              tags: '$(tag)'
 
