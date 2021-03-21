@@ -12,8 +12,7 @@ variables:
   tag: '$(Build.BuildId)'
 
 stages:
-- stage: Build
-  displayName: Build image
+- stage: Test
   jobs:
   - job: Test
     pool:
@@ -25,9 +24,9 @@ stages:
         scriptPath: './sample-test.sh'
       env:
         SHAKEDOWN_URL: https://duckduckgo.com
+- stage: Deploy
+  jobs:
   - job: Build
-    dependsOn: Test
-    displayName: Build and Push
     pool:
       vmImage: ubuntu-latest
     steps:
