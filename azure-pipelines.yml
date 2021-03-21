@@ -15,15 +15,28 @@ stages:
 - stage: Build
   displayName: Build image
   jobs:
+  - job: Test
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: ShellScript@2
+      displayName: Run sample test
+      inputs:
+        scriptPath: './sample-test.sh'
+        args: '-u https://duckduckgo.com'
   - job: Build
     displayName: Build
     pool:
       vmImage: ubuntu-latest
     steps:
     - task: Docker@2
-      displayName: Build an image
+      displayName: Build the image
       inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        containerRegistry: 'docker.io/robwhitby'
+        repository: 'shakedown-ap'
+        command: 'buildAndPush'
+        Dockerfile: './Dockerfile'
+        buildContext: '.'
         tags: |
           $(tag)
+          latest
