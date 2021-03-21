@@ -23,20 +23,22 @@ stages:
       displayName: Run sample test
       inputs:
         scriptPath: './sample-test.sh'
-        args: '-u https://duckduckgo.com'
+      env:
+        SHAKEDOWN_URL: https://duckduckgo.com
   - job: Build
-    displayName: Build
+    dependsOn: Test
+    displayName: Build and Push
     pool:
       vmImage: ubuntu-latest
     steps:
     - task: Docker@2
-      displayName: Build the image
+      displayName: Build and push the image
       inputs:
         containerRegistry: 'docker.io/robwhitby'
-        repository: 'shakedown-ap'
+        repository: 'shakedown'
         command: 'buildAndPush'
         Dockerfile: './Dockerfile'
         buildContext: '.'
         tags: |
           $(tag)
-          latest
+
