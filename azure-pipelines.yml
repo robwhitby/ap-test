@@ -34,11 +34,10 @@ stages:
     - task: Docker@2
       displayName: Build and push the image
       inputs:
-        containerRegistry: 'docker.io/robwhitby'
+        containerRegistry: 'dockerhub-robwhitby'
         repository: 'shakedown'
         command: 'buildAndPush'
         Dockerfile: './Dockerfile'
         buildContext: '.'
-        tags: |
-          $(tag)
+        tags: '$(tag)'
 
