@@ -46,4 +46,3 @@ stages:
               Dockerfile: './Dockerfile'
               buildContext: '.'
               tags: '$(tag)'
-
