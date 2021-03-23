@@ -39,25 +39,34 @@ stages:
         arguments: 'app'
         currentWorkingDirectory: '$(System.DefaultWorkingDirectory)/docker-compose'
 
-# - stage: Deploy
-#   jobs:
-#   - deployment: Deploy
-#     displayName: deploy to dockerhub
-#     pool:
-#       vmImage: 'Ubuntu-latest'
-#     # creates an environment if it doesn't exist
-#     environment: 'dockerhub'
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - checkout: self
-#           - task: Docker@2
-#             displayName: Build and push the image
-#             inputs:
-#               containerRegistry: 'dockerhub-robwhitby'
-#               repository: 'robwhitby/shakedown'
-#               command: 'buildAndPush'
-#               Dockerfile: './Dockerfile'
-#               buildContext: '.'
-#               tags: '$(tag)'
+- stage: Deploy
+  jobs:
+  - job: Test
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: ShellScript@2
+      displayName: Run sample test
+      inputs:
+        scriptPath: './sample-test.sh'
+      env:
+        SHAKEDOWN_URL: https://duckduckgo.com
+  - deployment: Deploy
+    displayName: deploy to dockerhub
+    pool:
+      vmImage: 'Ubuntu-latest'
+    environment: 'dockerhub'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - task: Docker@2
+            displayName: Build and push the image
+            inputs:
+              containerRegistry: 'dockerhub-robwhitby'
+              repository: 'robwhitby/shakedown'
+              command: 'buildAndPush'
+              Dockerfile: './Dockerfile'
+              buildContext: '.'
+              tags: '$(tag)'
