@@ -36,7 +36,7 @@ stages:
         dockerComposeFile: 'docker-compose/docker-compose.yml'
         action: 'Run a Docker Compose command'
         dockerComposeCommand: 'run'
-        arguments: './test.sh'
+        arguments: 'app'
         currentWorkingDirectory: '$(System.DefaultWorkingDirectory)/docker-compose'
 
 # - stage: Deploy
