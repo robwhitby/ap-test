@@ -5,6 +5,9 @@
 resources:
 - repo: self
 
+trigger:
+  batch: true
+
 variables:
   tag: '$(Build.BuildId)'
 
