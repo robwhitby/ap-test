@@ -33,7 +33,7 @@ stages:
     steps:
     - task: DockerCompose@0
       inputs:
-        dockerComposeFile: 'docker-compose.yml'
+        dockerComposeFile: 'docker-compose/docker-compose.yml'
         action: 'Run a Docker Compose command'
         dockerComposeCommand: './test.sh'
         currentWorkingDirectory: '$(System.DefaultWorkingDirectory)/docker-compose'
